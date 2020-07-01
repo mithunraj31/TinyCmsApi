@@ -51,19 +51,19 @@ public class UserServiceImpl implements UserDetailsService {
 		//return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
 	}
 
-	public List<UserEntityModel> findAll() {
+	public List<UserEntityModel> getAll() {
 		return userDao.findAll();
 	}
 
 
 
 	
-	public UserEntityModel findOne(String email) {
+	public UserEntityModel getUserByEmail(String email) {
 		return userDao.findByEmail(email);
 	}
 
 
-	public Optional<UserEntityModel> findById(int userId) {
+	public Optional<UserEntityModel> getUserById(int userId) {
 		return userDao.findById(userId);
 	}
 
@@ -75,6 +75,7 @@ public class UserServiceImpl implements UserDetailsService {
 		user.setFirstName(userEntity.getFirstName());
 		user.setRoleId(userEntity.getRoleId());
 		user.setUserId(userId);
+		
 		return userDao.save(user);
 		}
 		return user;
