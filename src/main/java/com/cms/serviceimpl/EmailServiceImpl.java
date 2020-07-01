@@ -36,6 +36,11 @@ public class EmailServiceImpl  {
 		javaMailSender.send(msg);
 
 	}
+	/*
+	 * This Method can be used
+	 * when the mail has to sent along
+	 * with some attachments.
+	 * */
 
 	void sendEmailWithAttachment() throws MessagingException, IOException {
 

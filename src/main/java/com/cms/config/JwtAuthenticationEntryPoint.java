@@ -17,7 +17,11 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Se
     public void commence(HttpServletRequest request,
                          HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
-
+    	String path =request.getRequestURI();
+        if(path.equals("/api/login")) {
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "UserName or Password is invalid");
+    }else {
+    	 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You are Unauthorized");
     }
+}
 }
