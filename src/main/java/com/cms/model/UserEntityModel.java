@@ -22,9 +22,11 @@ public class UserEntityModel {
     private String email;
     
     @Column
+    private String stkUser;
+    
+    @Column
     @JsonIgnore
     private String password;
-
 
 	@Column
     private int roleId;
@@ -106,6 +108,15 @@ public class UserEntityModel {
 		this.roleId = roleId;
 	}
 
-    
+
+	public String getStkUser() {
+		return stkUser;
+	}
+
+
+	public void setStkUser(String stkUser) {
+		this.stkUser = stkUser;
+	}
+
  
 }
