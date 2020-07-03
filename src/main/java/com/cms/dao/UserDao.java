@@ -15,6 +15,6 @@ public interface UserDao extends JpaRepository<UserEntityModel, Integer> {
     @Transactional
 	@Modifying
     @Query(value="INSERT INTO `user_role` (`user_userid`,`role_roleid`)VALUES(?1,?2) ", nativeQuery = true)
-	public void saveRelation(int userId, int roleId);
+	public void addRoleToUser(int userId, int roleId);
 }
 

@@ -23,7 +23,7 @@ import com.cms.model.LoginUserModel;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/cms")
+@RequestMapping("/api")
 public class AuthenticationController {
 
     @Autowired
