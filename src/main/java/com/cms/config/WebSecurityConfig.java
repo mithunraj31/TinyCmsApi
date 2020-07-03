@@ -1,8 +1,7 @@
 package com.cms.config;
 
 import javax.annotation.Resource;
-
-import com.cms.dao.StonkamAccessToken;
+import com.cms.dto.StonkamAccessTokenDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -71,8 +70,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
-    public StonkamAccessToken stonkamAccessToken() {
-        return new StonkamAccessToken();
+    public StonkamAccessTokenDto stonkamAccessToken() {
+        return new StonkamAccessTokenDto();
     }
 
 }

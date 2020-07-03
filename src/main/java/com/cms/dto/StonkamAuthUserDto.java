@@ -3,7 +3,7 @@ package com.cms.dto;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-public class StonkamAuthUser {
+public class StonkamAuthUserDto {
 
     private String userName;
 
@@ -13,11 +13,11 @@ public class StonkamAuthUser {
 
     private int authType;
 
-    public StonkamAuthUser() {
+    public StonkamAuthUserDto() {
 
     }
 
-    public StonkamAuthUser(String userName,
+    public StonkamAuthUserDto(String userName,
      String password,
      String version,
      int authType) {

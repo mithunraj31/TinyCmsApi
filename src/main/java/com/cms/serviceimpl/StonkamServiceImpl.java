@@ -3,9 +3,9 @@ package com.cms.serviceimpl;
 import java.time.LocalDateTime;
 
 import com.cms.constants.Constants;
-import com.cms.dao.StonkamAccessToken;
-import com.cms.dao.StonkamAuth;
-import com.cms.dto.StonkamAuthUser;
+import com.cms.dto.StonkamAccessTokenDto;
+import com.cms.dto.StonkamAuthDto;
+import com.cms.dto.StonkamAuthUserDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-@Service("stonkamServiceImpl")
+@Service("StonkamServiceImpl")
 public class StonkamServiceImpl {
 
     /**
@@ -27,7 +27,7 @@ public class StonkamServiceImpl {
      * sigleton context for store latest stokam access token
      */
     @Autowired
-    private StonkamAccessToken stonkamAccessToken;
+    private StonkamAccessTokenDto stonkamAccessToken;
 
     /**
      * application.properties
@@ -83,9 +83,9 @@ public class StonkamServiceImpl {
      */
     private long requestAccessToken() {
         final String endpoint = stonkamHostname + Constants.STONKAM_AUTH_ENDPOINT;
-        StonkamAuthUser stonkamAdmin = new StonkamAuthUser(this.stonkamAdminUserName, this.stonkamAdminPassword, this.stonkamAdminVersion, this.stonkamAdminAuthType);
-        HttpEntity<StonkamAuthUser> requestBody = new HttpEntity<StonkamAuthUser>(stonkamAdmin);
-        ResponseEntity<StonkamAuth> response = this.restService.postForEntity(endpoint, requestBody, StonkamAuth.class);
+        StonkamAuthUserDto stonkamAuthUserDto = new StonkamAuthUserDto(this.stonkamAdminUserName, this.stonkamAdminPassword, this.stonkamAdminVersion, this.stonkamAdminAuthType);
+        HttpEntity<StonkamAuthUserDto> requestBody = new HttpEntity<StonkamAuthUserDto>(stonkamAuthUserDto);
+        ResponseEntity<StonkamAuthDto> response = this.restService.postForEntity(endpoint, requestBody, StonkamAuthDto.class);
         if (response.getStatusCode() == HttpStatus.OK) {
             return response.getBody().getSessionId();
         }

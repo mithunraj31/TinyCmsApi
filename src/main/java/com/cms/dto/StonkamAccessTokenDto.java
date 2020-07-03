@@ -1,14 +1,14 @@
-package com.cms.dao;
+package com.cms.dto;
 
 import java.time.LocalDateTime;
 
-public class StonkamAccessToken {
+public class StonkamAccessTokenDto {
 
     private long accessToken;
 
     private LocalDateTime exipreDateTime;
 
-    public StonkamAccessToken() {
+    public StonkamAccessTokenDto() {
 
     }
 

@@ -1,9 +1,9 @@
-package com.cms.dao;
+package com.cms.dto;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-public class StonkamAuth {
+public class StonkamAuthDto {
 
     private String userName;
 
