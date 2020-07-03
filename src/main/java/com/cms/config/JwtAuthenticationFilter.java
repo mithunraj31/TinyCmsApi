@@ -41,7 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
     	String path =req.getRequestURI();
-        if(path.equals("/mbel/login")||path.equals("/mbel/user/register/")) {
+        if(path.equals("/mbel/login")||path.equals("/mbel/user/register/")||path.equals("/")) {
                chain.doFilter(req, res);
             return ;
         }
