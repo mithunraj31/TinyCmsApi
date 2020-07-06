@@ -10,9 +10,7 @@ public class Constants {
     public static final String STRING_FALSE = "false";
 	public static final String STRING_TRUE = "true";
 	public static final String MESSAGE ="message";
-	public static final String USER_NAME ="userName";
+    public static final String USER_NAME ="userName";
 
-	
-	
-	
+    public static final String STONKAM_AUTH_ENDPOINT = "/RecordDataAuthentication/100";
 }
