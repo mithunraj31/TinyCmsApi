@@ -19,21 +19,21 @@ import com.cms.serviceimpl.RegistrationServiceImpl;
 @RestController
 @RequestMapping("/api")
 public class RegistrationController {
-	
+
 	@Autowired
 	RegistrationServiceImpl registrationServiceImpl;
-	
+
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@PostMapping(value="/user/register/")
-    public ResponseEntity<Map<String, String>> saveUser(@RequestBody UserDto user){
-        return registrationServiceImpl.register(user);
-    }
-
-	 @PostMapping(value="/user/password/")
-	    public ResponseEntity<Map<String, String>> updateUserPassword(@RequestBody UpdatePasswordModel updatePasswordModel){
-	        return registrationServiceImpl.updateUserPassword(updatePasswordModel.getOldPassword(),
-	        		updatePasswordModel.getNewPassword(),updatePasswordModel.getConfirmPassword());
-	    }
-
+	@PostMapping(value = "/user/register")
+	public ResponseEntity<Map<String, String>> saveUser(@RequestBody UserDto user) {
+		return registrationServiceImpl.register(user);
 	}
 
+	@PostMapping(value = "/user/password")
+	public ResponseEntity<Map<String, String>> updateUserPassword(
+			@RequestBody UpdatePasswordModel updatePasswordModel) {
+		return registrationServiceImpl.updateUserPassword(updatePasswordModel.getOldPassword(),
+				updatePasswordModel.getNewPassword(), updatePasswordModel.getConfirmPassword());
+	}
+
+}
