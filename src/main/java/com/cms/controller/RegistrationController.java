@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cms.constants.Constants;
 import com.cms.dto.UserDto;
 import com.cms.model.UpdatePasswordModel;
 import com.cms.serviceimpl.RegistrationServiceImpl;
@@ -23,7 +24,7 @@ public class RegistrationController {
 	@Autowired
 	RegistrationServiceImpl registrationServiceImpl;
 	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize(Constants.ADMIN)
 	@PostMapping(value="/user/register/")
     public ResponseEntity<Map<String, String>> saveUser(@RequestBody UserDto user){
         return registrationServiceImpl.register(user);
