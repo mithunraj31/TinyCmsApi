@@ -10,7 +10,7 @@ public class Constants {
     public static final String STRING_FALSE = "false";
 	public static final String STRING_TRUE = "true";
 	public static final String MESSAGE ="message";
-	public static final String USER_NAME ="userName";
+    public static final String USER_NAME ="userName";
 
 	
 	public static final String STK_URL = "http://54.65.187.82:6060"; 
@@ -20,4 +20,5 @@ public class Constants {
 	public static final int STK_AUTHTYPE = 1;
 	
 	public static final String KITTING_URL = "https://mbel.tokyo/fs/kitting"; 
+    public static final String STONKAM_AUTH_ENDPOINT = "/RecordDataAuthentication/100";
 }
