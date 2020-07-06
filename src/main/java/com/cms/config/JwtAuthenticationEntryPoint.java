@@ -14,14 +14,14 @@ import org.springframework.stereotype.Component;
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Serializable {
 
     @Override
-    public void commence(HttpServletRequest request,
-                         HttpServletResponse response,
-                         AuthenticationException authException) throws IOException {
-    	String path =request.getRequestURI();
-        if(path.equals("/api/login/")) {
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "UserName or Password is invalid");
-    }else {
-    	 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You are Unauthorized");
+    public void commence(HttpServletRequest request, HttpServletResponse response,
+            AuthenticationException authException) throws IOException {
+        String path = request.getRequestURI().replaceAll("/$", "");
+
+        if (path.equals("/api/login")) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "UserName or Password is invalid");
+        } else {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You are Unauthorized");
+        }
     }
-}
 }

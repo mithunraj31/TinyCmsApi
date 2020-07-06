@@ -22,7 +22,5 @@ public class Constants {
     
     public static final String ADMIN=  "hasRole('ROLE_ADMIN')";
 
-	
-	
-	
+    public static final String STONKAM_AUTH_ENDPOINT = "/RecordDataAuthentication/100";
 }
