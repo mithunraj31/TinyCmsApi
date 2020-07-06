@@ -33,7 +33,7 @@ public class AuthenticationController {
     private TokenProvider jwtTokenUtil;
     
 
-    @PostMapping(value = "/login")
+    @PostMapping(value = "/login/")
     public ResponseEntity<?> register(@RequestBody LoginUserModel loginUserModel) throws AuthenticationException {
 
         final Authentication authentication = authenticationManager.authenticate(

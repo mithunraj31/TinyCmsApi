@@ -53,6 +53,7 @@ public class RegistrationServiceImpl {
 			}catch(Exception e) {
 				e.printStackTrace();
 			}
+			response.put(Constants.MESSAGE, "Registration successful");
 			return new ResponseEntity<Map<String,String>>(response, HttpStatus.OK);
 		}else {
 			response.put(Constants.MESSAGE, "Email already registered");
