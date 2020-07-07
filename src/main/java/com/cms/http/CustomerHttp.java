@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import com.cms.constants.Constants;
 import com.cms.dto.CustomerDto;
+import com.cms.dto.CustomerStatusDto;
+import com.cms.dto.VehicleDto;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
@@ -29,7 +31,8 @@ import com.google.gson.reflect.TypeToken;
 public class CustomerHttp {
 	@Autowired()
 	private Map<String, String> memoryMap;
-	
+	@Autowired()
+	VehicleHttp vehicleHttp;
 	
 	private static final JsonFactory JSON_FACTORY = new JacksonFactory();
 	private static HttpTransport TRANSPORT;
@@ -66,6 +69,41 @@ public class CustomerHttp {
 	    }
 	    
 		return customers;
+	}
+	
+	public List<CustomerStatusDto> getCustomersStatusByid(List<CustomerDto> stk_users){
+		List<CustomerStatusDto> customersStatus = new ArrayList<CustomerStatusDto>();
+		
+		for(int i=0; i<stk_users.size(); i++) {
+			List<VehicleDto> vehicles = new ArrayList<VehicleDto>();
+			CustomerStatusDto status = new CustomerStatusDto();
+			int total = 0;
+			int online = 0;
+			
+			status.setId(stk_users.get(i).getId());
+			status.setName(stk_users.get(i).getDescription());
+			status.setStk_user(stk_users.get(i).getStk_user());
+			try {
+				vehicles = this.vehicleHttp.getAllVehicles(stk_users.get(i).getStk_user());
+				total = vehicles.size();
+				
+				for(int j =0 ; i<vehicles.size(); i++) {
+					if(vehicles.get(i).isOnline()) {
+						online++;
+					}
+				}
+				
+			} catch (IOException e) {
+
+			}
+			
+			status.setTotalVehicle(total);
+			status.setRunningVehicle(online);
+			
+			customersStatus.add(status);
+		}
+		
+		return customersStatus;
 	}
 	
 	

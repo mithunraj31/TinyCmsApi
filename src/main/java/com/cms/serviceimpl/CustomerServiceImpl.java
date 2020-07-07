@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cms.dto.CustomerDto;
+import com.cms.dto.CustomerStatusDto;
 import com.cms.http.CustomerHttp;
 
 @Service("CustomerServiceImpl")
@@ -25,7 +26,7 @@ public class CustomerServiceImpl {
 		}
 		// filter customers with stk_user
 		List<CustomerDto> filteredCustomers = new ArrayList<CustomerDto>();
-		System.out.println(customers.size());
+
 		for (int i = 0; i < customers.size(); i++) {
 			CustomerDto c = customers.get(i);
 			if (c.getStk_user() != null && c.getStk_user() != "null" && c.getStk_user() != "") {
@@ -34,5 +35,13 @@ public class CustomerServiceImpl {
 
 		}
 		return filteredCustomers;
+	}
+	public List<CustomerStatusDto> getCustomersStatus() {
+		List<CustomerStatusDto> customersStatus = new ArrayList<CustomerStatusDto>();
+		List<CustomerDto> stk_users = this.getAllCustomers();
+		customersStatus = this.customerHttp.getCustomersStatusByid(stk_users);
+		
+		
+		return customersStatus;
 	}
 }
