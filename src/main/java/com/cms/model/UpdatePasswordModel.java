@@ -1,6 +1,6 @@
 package com.cms.model;
 
-public class UpdatePassword{
+public class UpdatePasswordModel{
 	
 	private String oldPassword;
 	

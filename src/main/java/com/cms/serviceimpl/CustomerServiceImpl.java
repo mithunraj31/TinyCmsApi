@@ -29,7 +29,9 @@ public class CustomerServiceImpl {
 
 		for (int i = 0; i < customers.size(); i++) {
 			CustomerDto c = customers.get(i);
-			if (c.getStk_user() != null && c.getStk_user() != "null" && c.getStk_user() != "") {
+			// the value can not be null 
+			// because CustomerHttp.getAllCustomers set default by empty string
+			if (!c.getStk_user().isEmpty()) {
 				filteredCustomers.add(c);
 			}
 
