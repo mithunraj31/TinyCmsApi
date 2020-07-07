@@ -16,7 +16,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Se
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException authException) throws IOException {
-        String path = request.getRequestURI().replaceAll("/$", "");
+        String path = request.getRequestURI();
 
         if (path.equals("/api/login")) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "UserName or Password is invalid");
