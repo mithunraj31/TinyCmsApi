@@ -24,6 +24,7 @@ public class CustomerController {
 	private CustomerServiceImpl customerService;
 	
 	@RequestMapping("")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?>  getCustomers() {
 		Map<String, Object> data = new LinkedHashMap<>();
 		List<CustomerDto> customers = customerService.getAllCustomers();
