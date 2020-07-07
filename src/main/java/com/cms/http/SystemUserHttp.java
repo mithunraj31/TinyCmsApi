@@ -19,7 +19,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.http.json.JsonHttpContent;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
-
+import com.google.api.client.util.Value;
 import com.google.gson.Gson;
 
 @Service("SystemUserHttp")
@@ -31,11 +31,14 @@ public class SystemUserHttp {
 	private static HttpTransport TRANSPORT;
 	private static HttpRequestFactory REQ_FACTORY;
 
+
+	@Value("${stonkam.hostname}")
+    private String stonkamHostname;
 	
 	public void login() throws IOException {
 		 
 		Gson gson = new Gson();
-		GenericUrl url = new GenericUrl(Constants.STK_URL+"/RecordDataAuthentication/100");
+		GenericUrl url = new GenericUrl(this.stonkamHostname+"/RecordDataAuthentication/100");
 		Map<String, Object> data = new LinkedHashMap<>();
 		
 		    data.put("Username", Constants.STK_USERNAME);

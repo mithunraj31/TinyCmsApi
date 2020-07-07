@@ -23,11 +23,8 @@ public class Constants {
     public static final String ADMIN = "hasRole('ROLE_ADMIN')";
     public static final String STONKAM_AUTH_ENDPOINT = "/RecordDataAuthentication/100";
 
-    public static final String STK_URL = "http://54.65.187.82:6060";
     public static final String STK_USERNAME = "admin";
     public static final String STK_PASSWORD = "U2iE3Haf";
     public static final String STK_VERSION = "1.6.2.3";
     public static final int STK_AUTHTYPE = 1;
-
-    public static final String KITTING_URL = "https://mbel.tokyo/fs/kitting";
 }
