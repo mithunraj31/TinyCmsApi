@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.stereotype.Service;
 
-import com.cms.HttpModel.Customer;
 import com.cms.constants.Constants;
+import com.cms.dto.CustomerDto;
+import com.cms.dto.CustomerStatusDto;
+import com.cms.dto.VehicleDto;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
@@ -29,7 +31,8 @@ import com.google.gson.reflect.TypeToken;
 public class CustomerHttp {
 	@Autowired()
 	private Map<String, String> memoryMap;
-	
+	@Autowired()
+	VehicleHttp vehicleHttp;
 	
 	private static final JsonFactory JSON_FACTORY = new JacksonFactory();
 	private static HttpTransport TRANSPORT;
@@ -37,7 +40,7 @@ public class CustomerHttp {
 	
 	
 	@SuppressWarnings("unchecked")
-	public List<Customer> getAllCustomers() throws IOException, JSONException {
+	public List<CustomerDto> getAllCustomers() throws IOException{
 		Gson gson = new Gson();
 		GenericUrl url = new GenericUrl(Constants.KITTING_URL+"/latest");
 		
@@ -49,23 +52,58 @@ public class CustomerHttp {
 	    Map<String, Object> resultObj= gson.fromJson(responseBody, type);
 	    List<Map<String,Object>> customerArray = (List<Map<String,Object>>) resultObj.get("customers");
 	    
-	    List<Customer> customers= new ArrayList<Customer>();
+	    List<CustomerDto> customers= new ArrayList<CustomerDto>();
 	    for(int i =0; i<customerArray.size();i++) {
 	    	Map<String,Object> j = customerArray.get(i);
-	    	Customer c = new Customer();
-	    	c.id = (int) Double.parseDouble(j.get("id").toString());
-	    	c.description = j.get("description").toString();
-	    	c.sid = j.get("sid").toString();
+	    	CustomerDto c = new CustomerDto();
+	    	c.setId((int) Double.parseDouble(j.get("id").toString()));
+	    	c.setDescription(j.get("description").toString());
+	    	c.setSid(j.get("sid").toString());
 	    	if(j.containsKey("stk_user")&&j.get("stk_user") != null) {
-	    		c.stk_user = j.get("stk_user").toString();
+	    		c.setStk_user(j.get("stk_user").toString());
 	    	}else {
 	    		
-	    		c.stk_user = "";
+	    		c.setStk_user("");
 	    	}
 	    	customers.add(c);
 	    }
 	    
 		return customers;
+	}
+	
+	public List<CustomerStatusDto> getCustomersStatusByid(List<CustomerDto> stk_users){
+		List<CustomerStatusDto> customersStatus = new ArrayList<CustomerStatusDto>();
+		
+		for(int i=0; i<stk_users.size(); i++) {
+			List<VehicleDto> vehicles = new ArrayList<VehicleDto>();
+			CustomerStatusDto status = new CustomerStatusDto();
+			int total = 0;
+			int online = 0;
+			
+			status.setId(stk_users.get(i).getId());
+			status.setName(stk_users.get(i).getDescription());
+			status.setStk_user(stk_users.get(i).getStk_user());
+			try {
+				vehicles = this.vehicleHttp.getAllVehicles(stk_users.get(i).getStk_user());
+				total = vehicles.size();
+				
+				for(int j =0 ; i<vehicles.size(); i++) {
+					if(vehicles.get(i).isOnline()) {
+						online++;
+					}
+				}
+				
+			} catch (IOException e) {
+
+			}
+			
+			status.setTotalVehicle(total);
+			status.setRunningVehicle(online);
+			
+			customersStatus.add(status);
+		}
+		
+		return customersStatus;
 	}
 	
 	
