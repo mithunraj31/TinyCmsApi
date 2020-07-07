@@ -83,8 +83,8 @@ public class CustomerHttp {
 				vehicles = this.vehicleHttp.getAllVehicles(stk_users.get(i).getStk_user());
 				total = vehicles.size();
 
-				for (int j = 0; i < vehicles.size(); i++) {
-					if (vehicles.get(i).isOnline()) {
+				for (int j = 0; j < vehicles.size(); j++) {
+					if (vehicles.get(j).isOnline()) {
 						online++;
 					}
 				}
