@@ -7,7 +7,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.cms.HttpModel.Customer;
+
+import com.cms.dto.CustomerDto;
 import com.cms.serviceimpl.CustomerServiceImpl;
 
 
@@ -21,7 +22,7 @@ public class CustomerController {
 	@RequestMapping("")
 	public Map<String, Object>  getCustomers() {
 		Map<String, Object> data = new LinkedHashMap<>();
-		List<Customer> customers = customerService.getAllCustomers();
+		List<CustomerDto> customers = customerService.getAllCustomers();
 		data.put("message", "Success");
 		data.put("customers", customers);
 		return data;

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cms.constants.Constants;
-import com.cms.model.SystemUser;
+import com.cms.dto.SystemUserDto;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpContent;
 import com.google.api.client.http.HttpRequest;
@@ -51,9 +51,8 @@ public class SystemUserHttp {
 		    
 		    // parse data into SystemUser
 		    try {
-		    	SystemUser systemUser = gson.fromJson(responseBody, SystemUser.class);
-		    	memoryMap.put("sessionId", Integer.toString(systemUser.SessionId));
-		    	System.out.println(systemUser.SessionId);
+		    	SystemUserDto systemUser = gson.fromJson(responseBody, SystemUserDto.class);
+		    	memoryMap.put("sessionId", Integer.toString(systemUser.getSessionId()));
 			} catch (Exception e) {
 				// TODO: handle exception
 				System.out.println(e.getMessage());

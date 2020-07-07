@@ -6,13 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 
-import org.json.JSONException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cms.HttpModel.Customer;
 import com.cms.constants.Constants;
+import com.cms.dto.CustomerDto;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
@@ -39,7 +37,7 @@ public class CustomerHttp {
 	
 	
 	@SuppressWarnings("unchecked")
-	public List<Customer> getAllCustomers() throws IOException, JSONException {
+	public List<CustomerDto> getAllCustomers() throws IOException{
 		Gson gson = new Gson();
 		GenericUrl url = new GenericUrl(Constants.KITTING_URL+"/latest");
 		
@@ -51,18 +49,18 @@ public class CustomerHttp {
 	    Map<String, Object> resultObj= gson.fromJson(responseBody, type);
 	    List<Map<String,Object>> customerArray = (List<Map<String,Object>>) resultObj.get("customers");
 	    
-	    List<Customer> customers= new ArrayList<Customer>();
+	    List<CustomerDto> customers= new ArrayList<CustomerDto>();
 	    for(int i =0; i<customerArray.size();i++) {
 	    	Map<String,Object> j = customerArray.get(i);
-	    	Customer c = new Customer();
-	    	c.id = (int) Double.parseDouble(j.get("id").toString());
-	    	c.description = j.get("description").toString();
-	    	c.sid = j.get("sid").toString();
+	    	CustomerDto c = new CustomerDto();
+	    	c.setId((int) Double.parseDouble(j.get("id").toString()));
+	    	c.setDescription(j.get("description").toString());
+	    	c.setSid(j.get("sid").toString());
 	    	if(j.containsKey("stk_user")&&j.get("stk_user") != null) {
-	    		c.stk_user = j.get("stk_user").toString();
+	    		c.setStk_user(j.get("stk_user").toString());
 	    	}else {
 	    		
-	    		c.stk_user = "";
+	    		c.setStk_user("");
 	    	}
 	    	customers.add(c);
 	    }

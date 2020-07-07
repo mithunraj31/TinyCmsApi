@@ -5,7 +5,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.cms.HttpModel.Customer;
+
+import com.cms.dto.CustomerDto;
 import com.cms.http.CustomerHttp;
 
 @Service("CustomerServiceImpl")
@@ -13,9 +14,9 @@ public class CustomerServiceImpl {
 	@Autowired
 	private CustomerHttp customerHttp;
 
-	public List<Customer> getAllCustomers() {
+	public List<CustomerDto> getAllCustomers() {
 
-		List<Customer> customers = new ArrayList<Customer>();
+		List<CustomerDto> customers = new ArrayList<CustomerDto>();
 		try {
 			customers = customerHttp.getAllCustomers();
 		} catch (Exception e) {
@@ -23,11 +24,11 @@ public class CustomerServiceImpl {
 			e.printStackTrace();
 		}
 		// filter customers with stk_user
-		List<Customer> filteredCustomers = new ArrayList<Customer>();
+		List<CustomerDto> filteredCustomers = new ArrayList<CustomerDto>();
 		System.out.println(customers.size());
 		for (int i = 0; i < customers.size(); i++) {
-			Customer c = customers.get(i);
-			if (c.stk_user != null && c.stk_user != "null" && c.stk_user != "") {
+			CustomerDto c = customers.get(i);
+			if (c.getStk_user() != null && c.getStk_user() != "null" && c.getStk_user() != "") {
 				filteredCustomers.add(c);
 			}
 
