@@ -34,7 +34,7 @@ public class AuthenticationController {
     
 
     @PostMapping(value = "/login")
-    public ResponseEntity<?> register(@RequestBody LoginUserModel loginUserModel) throws AuthenticationException {
+    public ResponseEntity<AuthTokenModel> register(@RequestBody LoginUserModel loginUserModel) throws AuthenticationException {
 
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
