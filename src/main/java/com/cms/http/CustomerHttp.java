@@ -29,15 +29,12 @@ import com.google.gson.reflect.TypeToken;
 
 @Service("CustomerHttp")
 public class CustomerHttp {
-	@Autowired()
-	private Map<String, String> memoryMap;
+
 	@Autowired()
 	VehicleHttp vehicleHttp;
 	
-	private static final JsonFactory JSON_FACTORY = new JacksonFactory();
 	private static HttpTransport TRANSPORT;
 	private static HttpRequestFactory REQ_FACTORY;
-	
 	
 	@SuppressWarnings("unchecked")
 	public List<CustomerDto> getAllCustomers() throws IOException{
@@ -87,8 +84,8 @@ public class CustomerHttp {
 				vehicles = this.vehicleHttp.getAllVehicles(stk_users.get(i).getStk_user());
 				total = vehicles.size();
 				
-				for(int j =0 ; i<vehicles.size(); i++) {
-					if(vehicles.get(i).isOnline()) {
+				for(int j =0 ; j<vehicles.size(); j++) {
+					if(vehicles.get(j).isOnline()) {
 						online++;
 					}
 				}
