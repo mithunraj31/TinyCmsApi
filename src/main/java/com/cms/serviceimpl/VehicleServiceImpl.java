@@ -12,17 +12,33 @@ import com.cms.http.VehicleHttp;
 
 @Service("VehicleServiceImpl")
 public class VehicleServiceImpl {
-@Autowired
-private VehicleHttp vehicleHttp;
+	@Autowired
+	private VehicleHttp vehicleHttp;
 
-public List<VehicleDto> getAllVehiclesByUser(String user) {
-	List<VehicleDto> vehicleList = new ArrayList<>();
-	try {
-		vehicleList = vehicleHttp.getAllVehicles(user);
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+	public List<VehicleDto> getAllVehiclesByUser(String user) {
+		List<VehicleDto> vehicleList = new ArrayList<>();
+		try {
+			vehicleList = this.vehicleHttp.getAllVehicles(user);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return vehicleList;
 	}
-	return vehicleList;
-}
+
+	// get vehicle information by id
+	public VehicleDto getVehicleById(long vehicleId, String user) {
+		// get all vehicle from stonkam API
+		final List<VehicleDto> vehicleList = this.getAllVehiclesByUser(user);
+		if (vehicleList != null && vehicleList.size() > 0) {
+			// return vehicle information is contain device id match with vehicleId
+			return vehicleList.stream()
+			.filter(x -> x.getId() == vehicleId)
+			.findFirst()
+			.get();
+		}
+
+		return null;
+		
+	}
 }
