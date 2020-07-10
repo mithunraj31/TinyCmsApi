@@ -48,7 +48,7 @@ public class TokenProvider implements Serializable {
         return claimsResolver.apply(claims);
     }
 
-    private Claims getAllClaimsFromToken(String token) {
+    public Claims getAllClaimsFromToken(String token) {
         return Jwts.parser()
                 .setSigningKey(SIGNING_KEY)
                 .parseClaimsJws(token)
@@ -64,6 +64,8 @@ public class TokenProvider implements Serializable {
     	UserEntityModel user = userDao.findByEmail(email);
           final String firstName = user.getFirstName();
           final String lastName = user.getLastName();
+          final int userId = user.getUserId();
+          final String stk_user = user.getStkUser();
         final String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
@@ -72,6 +74,8 @@ public class TokenProvider implements Serializable {
                 .claim(AUTHORITIES_KEY, authorities)
                 .claim("firstName", firstName)
                 .claim("lastName", lastName)
+                .claim("userId", userId)
+                .claim("stk_user", stk_user)
                 .signWith(SignatureAlgorithm.HS256, SIGNING_KEY)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_VALIDITY_SECONDS*1000))

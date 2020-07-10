@@ -20,9 +20,6 @@ import com.cms.config.TokenProvider;
 import com.cms.model.AuthTokenModel;
 import com.cms.model.LoginUserModel;
 
-
-
-
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
