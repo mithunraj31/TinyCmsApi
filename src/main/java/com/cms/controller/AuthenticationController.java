@@ -14,12 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 import com.cms.config.TokenProvider;
 import com.cms.model.AuthTokenModel;
 import com.cms.model.LoginUserModel;
-
-
-
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -34,7 +33,7 @@ public class AuthenticationController {
     
 
     @PostMapping(value = "/login")
-    public ResponseEntity<AuthTokenModel> register(@RequestBody LoginUserModel loginUserModel) throws AuthenticationException {
+    public ResponseEntity<?> register(@Valid @RequestBody LoginUserModel loginUserModel) throws AuthenticationException {
 
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
