@@ -72,15 +72,15 @@ public class VehicleController {
 		Claims user = tokenProvider.getAllClaimsFromToken(token);
 		String stk_user = user.get("stk_user", String.class);
 		Map<String, Object> response = new LinkedHashMap<>();
-
-		if (vehicleId > 0) {
-			final VehicleDto vehicleDto = 
+		
+		final VehicleDto vehicleDto = 
 				this.vehicleService.getVehicleById(vehicleId, stk_user);
+		if (vehicleDto != null) {
 			response.put("message", "Success");
 			response.put("vehicle", vehicleDto);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 		}
 		response.put("message", "Failed");
-		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		return new ResponseEntity(HttpStatus.NOT_FOUND);
 	}
 }
