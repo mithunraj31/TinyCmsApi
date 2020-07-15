@@ -114,7 +114,7 @@ public class VehicleServiceImpl {
 			Object online = record[2];
 			hourlyOnlineDtoList.add(new HourlyOnlineDto(
 				this.formatStringDateFormObject(day), 
-				(int) hour,
+				((BigInteger)hour).intValue(),
 				((BigInteger)online).longValue()));
 		});
 		
