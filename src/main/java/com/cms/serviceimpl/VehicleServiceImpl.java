@@ -138,4 +138,22 @@ public class VehicleServiceImpl {
 		}
 		return "";
 	}
+	
+	// get vehicle information by id
+	public VehicleDto getVehicleById(long vehicleId, String user) {
+		// get all vehicle from stonkam API
+		final List<VehicleDto> vehicleList = this.getAllVehiclesByUser(user);
+		if (vehicleList != null 
+			&& vehicleList.size() > 0
+			&& vehicleList.stream().anyMatch(x -> x.getId() == vehicleId)) {
+			// return vehicle information is contain device id match with vehicleId
+			return vehicleList.stream()
+			.filter(x -> x.getId() == vehicleId)
+			.findFirst()
+			.get();
+		}
+
+		return null;
+		
+	}
 }
