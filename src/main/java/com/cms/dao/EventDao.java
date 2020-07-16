@@ -10,11 +10,19 @@ import org.springframework.stereotype.Repository;
 
 import com.cms.model.EventModel;
 
-
 @Repository
-public interface EventDao extends JpaRepository<EventModel, Integer>{
-	
-	@Query(value="SELECT * FROM `event` WHERE  device_id = ?1"  , nativeQuery = true)
+public interface EventDao extends JpaRepository<EventModel, Integer> {
+
+	@Query(value = "SELECT * FROM `event` WHERE  device_id = ?1", nativeQuery = true)
 	List<EventModel> findByDeviceId(@Valid int deviceId);
+
+	@Query(value = "SELECT * FROM `event` WHERE  event_id = ?1", nativeQuery = true)
+	EventModel findByEventId(String eventId);
+
+	@Query("SELECT * FROM A a  LEFT JOIN B b ON a.eventId = b.eventId")
+	List<EventModel> findAllWithConvertedVideo();
+
+	@Query("SELECT * FROM A a  LEFT JOIN B b ON a.eventId = b.eventId WHERE a.username = ?1")
+	List<EventModel> findAllByUserWithConvertedVideo(String user);
 
 }

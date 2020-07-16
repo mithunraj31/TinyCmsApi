@@ -63,6 +63,4 @@ public class VideoModel {
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
     }
-    
-
 }

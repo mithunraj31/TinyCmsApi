@@ -1,81 +1,46 @@
-package com.cms.model;
+package com.cms.dto;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+public class EventDto {
 
-@Entity
-@Table(name = "event")
-public class EventModel {
-    @Id
-    @Column(name = "id")
     private String id;
 
-    @Column(name = "event_id")
     private String eventId;
 
-    @Column(name = "device_id")
     private String deviceId;
 
-    @Column(name = "driver_id")
     private String driverId;
 
-    @Column(name = "type")
     private int type;
 
-    @Column(name = "latitude")
     private float lat;
 
-    @Column(name = "longitude")
     private float lng;
 
-    @Column(name = "gx")
     private float gx;
 
-    @Column(name = "gy")
     private float gy;
 
-    @Column(name = "gz")
     private float gz;
 
-    @Column(name = "roll")
     private float roll;
 
-    @Column(name = "pitch")
     private float pitch;
 
-    @Column(name = "yaw")
     private float yaw;
 
-    @Column(name = "status")
     private int status;
 
-    @Column(name = "direction")
     private float direction;
 
-    @Column(name = "speed")
     private float speed;
 
-    @Column(name = "video_id")
     private String videoId;
 
-    @Column(name = "time")
     private LocalDateTime time;
 
-    @Column(name = "username")
     private String username;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id", nullable = true)
-    private VideoConvertedModel videoConverted;
-
-
 
     public String getId() {
         return id;
@@ -228,5 +193,4 @@ public class EventModel {
     public void setUsername(String username) {
         this.username = username;
     }
-
 }
