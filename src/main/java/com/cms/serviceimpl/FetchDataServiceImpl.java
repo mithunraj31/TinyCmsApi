@@ -32,12 +32,12 @@ public class FetchDataServiceImpl {
     @Autowired
     private VehicleHttp vehicleService;
 
-    @Scheduled(fixedDelay = 1000 * 60 * 10, initialDelay = 1000)
+    @Scheduled(fixedDelay = 1000 * 60 * 10, initialDelay = 5000)
     private void fetchCustomerData() {
         this.syncCustomerData();
     }
 
-    @Scheduled(fixedDelay = 1000 * 60 * 10, initialDelay = 10000)
+    @Scheduled(fixedDelay = 1000 * 60 * 10, initialDelay = 13000)
     private void fetchDeviceData() {
         this.syncDeviceData();
     }
