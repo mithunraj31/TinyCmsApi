@@ -2,6 +2,8 @@ package com.cms.dto;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class EventDto {
 
     private String id;
@@ -41,6 +43,27 @@ public class EventDto {
     private LocalDateTime time;
 
     private String username;
+
+    private String videoUrl;
+
+    private VideoDto video;
+
+    public VideoDto getVideo() {
+        return this.video;
+    }
+
+    public void setVideo(VideoDto video) {
+        this.video = video;
+    }
+
+    @JsonIgnore
+    public String getVideoUrl() {
+        return this.videoUrl;
+    }
+
+    public void setVideoUrl(String VideoUrl) {
+        this.videoUrl = VideoUrl;
+    }
 
     public String getId() {
         return id;
@@ -82,6 +105,7 @@ public class EventDto {
         this.type = type;
     }
 
+    @JsonIgnore
     public float getLat() {
         return lat;
     }
@@ -90,6 +114,7 @@ public class EventDto {
         this.lat = lat;
     }
 
+    @JsonIgnore
     public float getLng() {
         return lng;
     }
@@ -98,6 +123,7 @@ public class EventDto {
         this.lng = lng;
     }
 
+    @JsonIgnore
     public float getGx() {
         return gx;
     }
@@ -106,6 +132,7 @@ public class EventDto {
         this.gx = gx;
     }
 
+    @JsonIgnore
     public float getGy() {
         return gy;
     }
@@ -114,6 +141,7 @@ public class EventDto {
         this.gy = gy;
     }
 
+    @JsonIgnore
     public float getGz() {
         return gz;
     }
@@ -122,6 +150,7 @@ public class EventDto {
         this.gz = gz;
     }
 
+    @JsonIgnore
     public float getRoll() {
         return roll;
     }
@@ -130,6 +159,7 @@ public class EventDto {
         this.roll = roll;
     }
 
+    @JsonIgnore
     public float getPitch() {
         return pitch;
     }
@@ -138,6 +168,7 @@ public class EventDto {
         this.pitch = pitch;
     }
 
+    @JsonIgnore
     public float getYaw() {
         return yaw;
     }
@@ -146,6 +177,7 @@ public class EventDto {
         this.yaw = yaw;
     }
 
+    @JsonIgnore
     public int getStatus() {
         return status;
     }
@@ -154,6 +186,7 @@ public class EventDto {
         this.status = status;
     }
 
+    @JsonIgnore
     public float getDirection() {
         return direction;
     }
@@ -162,6 +195,7 @@ public class EventDto {
         this.direction = direction;
     }
 
+    @JsonIgnore
     public float getSpeed() {
         return speed;
     }
@@ -170,6 +204,7 @@ public class EventDto {
         this.speed = speed;
     }
 
+    @JsonIgnore
     public String getVideoId() {
         return videoId;
     }
@@ -192,5 +227,21 @@ public class EventDto {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public SensorDto getSensorValue() {
+        SensorDto dto = new SensorDto();
+        dto.setDirection(this.direction + "");
+        dto.setGx(this.gx + "");
+        dto.setGy(this.gy + "");
+        dto.setGz(this.gz + "");
+        dto.setLat(this.lat + "");
+        dto.setLng(this.lng + "");
+        dto.setPitch(this.pitch + "");
+        dto.setRoll(this.roll + "");
+        dto.setSpeed(this.speed);
+        dto.setStatus(this.status);
+        dto.setYaw(this.yaw + "");
+        return dto;
     }
 }

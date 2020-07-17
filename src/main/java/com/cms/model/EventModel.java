@@ -6,7 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -71,11 +70,16 @@ public class EventModel {
     @Column(name = "username")
     private String username;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id", nullable = true)
+    @OneToOne(mappedBy = "event", fetch = FetchType.EAGER)
     private VideoConvertedModel videoConverted;
 
+    public VideoConvertedModel getVideoConverted() {
+        return this.videoConverted;
+    }
 
+    public void setVideoConverted(VideoConvertedModel videoConverted) {
+        this.videoConverted = videoConverted;
+    }
 
     public String getId() {
         return id;
@@ -228,5 +232,4 @@ public class EventModel {
     public void setUsername(String username) {
         this.username = username;
     }
-
 }
