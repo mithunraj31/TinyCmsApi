@@ -20,7 +20,7 @@ public class VehicleDetailDto {
     private String scanCode;
 
     @SerializedName("ChannelNumber")
-    private long channelNumber;
+    private int channelNumber;
 
     @SerializedName("GroupName")
     private String groupName;
@@ -29,13 +29,13 @@ public class VehicleDetailDto {
     private String tcpServerAddr;
 
     @SerializedName("TcpStreamOutPort")
-    private long tcpStreamOutPort;
+    private int tcpStreamOutPort;
 
     @SerializedName("UdpServerAddr")
     private String udpServerAddr;
 
     @SerializedName("UdpStreamOutPort")
-    private long udpStreamOutPort;
+    private int udpStreamOutPort;
 
     @SerializedName("NetType")
     private int netType;
@@ -101,11 +101,11 @@ public class VehicleDetailDto {
         this.scanCode = scanCode;
     }
 
-    public long getChannelNumber() {
+    public int getChannelNumber() {
         return this.channelNumber;
     }
 
-    public void setChannelNumber(long channelNumber) {
+    public void setChannelNumber(int channelNumber) {
         this.channelNumber = channelNumber;
     }
 
@@ -125,11 +125,11 @@ public class VehicleDetailDto {
         this.tcpServerAddr = tcpServerAddr;
     }
 
-    public long getTcpStreamOutPort() {
+    public int getTcpStreamOutPort() {
         return this.tcpStreamOutPort;
     }
 
-    public void setTcpStreamOutPort(long tcpStreamOutPort) {
+    public void setTcpStreamOutPort(int tcpStreamOutPort) {
         this.tcpStreamOutPort = tcpStreamOutPort;
     }
 
@@ -141,11 +141,11 @@ public class VehicleDetailDto {
         this.udpServerAddr = udpServerAddr;
     }
 
-    public long getUdpStreamOutPort() {
+    public int getUdpStreamOutPort() {
         return this.udpStreamOutPort;
     }
 
-    public void setUdpStreamOutPort(long udpStreamOutPort) {
+    public void setUdpStreamOutPort(int udpStreamOutPort) {
         this.udpStreamOutPort = udpStreamOutPort;
     }
 
