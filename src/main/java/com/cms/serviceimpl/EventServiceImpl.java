@@ -101,6 +101,12 @@ public class EventServiceImpl {
 		return null;
 	}
 
+	/**
+	 * get device ids from EventDto listings and use it to find camera and video has contain ids
+	 * set video and camera data to new DTO object then assign to new listings.
+	 * @param dtos EventDto listings receive from get event methods.
+	 * @return mapped EventDto listings should contains vedio object
+	 */
 	private List<EventDto> setVideoToList(List<EventDto> dtos) {
 		final List<String> deviceIds = dtos.stream()
 							.map(x -> x.getDeviceId())
