@@ -30,16 +30,30 @@ public class LambdaController {
     @Autowired
     private LambdaServiceImpl lambdaService;
 
+    @Autowired
+    private RealTimeServiceImpl realtimeService;
+
     @PostMapping("/video")
     public ResponseEntity<?> newVideoUploadNotifier(@Valid @RequestBody final NotifierModel vunModel) {
         final Map<String, Object> data = this.lambdaService.uploadNewVideoNotifier(vunModel.getDeviceId(),
                 vunModel.getEventId());
+        this.realtimeService.onVideoStatusChanged(vunModel.getEventId());
         return new ResponseEntity<Map<String, Object>>(data, HttpStatus.OK);
     }
 
     @PostMapping("/event")
     public ResponseEntity<?> newEventNotifier(@Valid @RequestBody final NotifierModel eventModel) {
-        final Boolean result = this.lambdaService.onEventOccur(eventModel.getEventId());
+        final Boolean result = this.realtimeService.onEventOccur(eventModel.getEventId());
+        if (result) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        }
+    }
+    @PostMapping("/event/video")
+    public ResponseEntity<?> newVideoEventNotifier(@Valid @RequestBody final NotifierModel eventModel) {
+        final Boolean result = this.realtimeService.onVideoStatusChanged(eventModel.getEventId());
         if (result) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {

@@ -9,6 +9,7 @@ import java.util.NoSuchElementException;
 import com.cms.dao.CameraDao;
 import com.cms.dao.DeviceDao;
 import com.cms.dao.VideoDao;
+import com.cms.dto.EventDto;
 import com.cms.exceptions.GetCamerasException;
 import com.cms.exceptions.GetVideosException;
 import com.cms.exceptions.VideoNotFullfilledException;
@@ -35,9 +36,6 @@ public class LambdaServiceImpl {
     @Autowired
     private LambdaHttp lambdaHttp;
 
-    @Autowired
-    private RealTimeServiceImpl realtimeService;
-
     @Value("${vt.bucket.name}")
     private String bucketName;
 
@@ -46,10 +44,10 @@ public class LambdaServiceImpl {
     // and if uploaded this method will notify a Lambda function to Convert multiple
     // videos in to new video
     // then video_converted table will be inserted the new converted url
-    public Map<String, Object> uploadNewVideoNotifier(String deviceId, String eventId) {
-        Map<String, Object> response = new HashMap<>();
+    public Map<String, Object> uploadNewVideoNotifier(final String deviceId, final String eventId) {
+        final Map<String, Object> response = new HashMap<>();
         // Check device camera count
-        DeviceModel device = this.deviceDao.getDeviceById(deviceId);
+        final DeviceModel device = this.deviceDao.getDeviceById(deviceId);
         // Check whether the device is available
         if (device.getDeviceId() == null) {
             response.put("massage", "Device Not Found");
@@ -61,7 +59,7 @@ public class LambdaServiceImpl {
         try {
 
             videos = this.videoDao.getVideoByEventId(eventId);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             System.out.println(e);
             response.put("massage", "Something went wrong");
             response.put("code", 500);
@@ -72,7 +70,7 @@ public class LambdaServiceImpl {
         List<CameraModel> cameras = new ArrayList<CameraModel>();
         try {
             cameras = this.cameraDao.getCamerasByDeviceId(deviceId);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             System.out.println(e);
             response.put("massage", "Something went wrong on camera details");
             response.put("code", 500);
@@ -92,10 +90,10 @@ public class LambdaServiceImpl {
 
     }
 
-    private Map<String, Object> startConversionLambda(List<VideoModel> videos, List<CameraModel> cameras) {
-        Map<String, Object> lambdaRequest = new HashMap<>();
-        Map<String, Object> bucket = new HashMap<>();
-        Map<String, Object> video = new HashMap<>();
+    private Map<String, Object> startConversionLambda(final List<VideoModel> videos, final List<CameraModel> cameras) {
+        final Map<String, Object> lambdaRequest = new HashMap<>();
+        final Map<String, Object> bucket = new HashMap<>();
+        final Map<String, Object> video = new HashMap<>();
 
         String filename = videos.get(0).getUrl();
         filename = filename.split("/")[6];
@@ -109,12 +107,12 @@ public class LambdaServiceImpl {
         // this will change in the future
         video.put("cols", "auto");
 
-        List<Map<String, Object>> files = new ArrayList<>();
+        final List<Map<String, Object>> files = new ArrayList<>();
         for (int i = 0; cameras.size() > i; i++) {
-            Map<String, Object> f = new HashMap<>();
-            int rotation = cameras.get(i).getRotation();
-            String name = this.findVideo(videos, cameras.get(i).getCh());
-            if (name==null) {
+            final Map<String, Object> f = new HashMap<>();
+            final int rotation = cameras.get(i).getRotation();
+            final String name = this.findVideo(videos, cameras.get(i).getCh());
+            if (name == null) {
                 continue;
             }
             f.put("rotate", rotation);
@@ -127,15 +125,15 @@ public class LambdaServiceImpl {
 
         // execute lambda
         try {
-            String res = this.lambdaHttp.startVideoConversion(lambdaRequest);
-            Map<String, Object> response = new HashMap<>();
+            final String res = this.lambdaHttp.startVideoConversion(lambdaRequest);
+            final Map<String, Object> response = new HashMap<>();
             response.put("massage", "Convertion Started");
             response.put("code", 200);
             response.put("lambda", lambdaRequest);
-            response.put("response",res );
+            response.put("response", res);
             return response;
-        } catch (Exception e) {
-            Map<String, Object> response = new HashMap<>();
+        } catch (final Exception e) {
+            final Map<String, Object> response = new HashMap<>();
             response.put("massage", "Somthing went wrong when starting lambda");
             response.put("code", 500);
             response.put("lambda", lambdaRequest);
@@ -144,13 +142,13 @@ public class LambdaServiceImpl {
 
     }
 
-    private String findVideo(List<VideoModel> videos, String ch) {
+    private String findVideo(final List<VideoModel> videos, final String ch) {
 
         for (int i = 0; videos.size() > i; i++) {
             String f = videos.get(i).getUrl();
             f = f.split("/")[6];
 
-            String ch2 = f.split("_")[9];
+            final String ch2 = f.split("_")[9];
             if (ch.equals(ch2)) {
                 return f;
             }
@@ -158,13 +156,9 @@ public class LambdaServiceImpl {
         return null;
     }
 
-    public Boolean onEventOccur(String eventId) {
-        this.realtimeService.notifyEvent();
-        return true;
-    }
-    public Map<String, Object>  uploadNewVideoNotifierV2(String deviceId, String eventId) {
+    public Map<String, Object>  uploadNewVideoNotifierV2(final String deviceId, final String eventId) {
         // Check device camera count
-        DeviceModel device = this.deviceDao.getDeviceById(deviceId);
+        final DeviceModel device = this.deviceDao.getDeviceById(deviceId);
         // Check whether the device is available
         if (device.getDeviceId() == null) {
             throw new NoSuchElementException();
@@ -174,7 +168,7 @@ public class LambdaServiceImpl {
         List<VideoModel> videos = new ArrayList<VideoModel>();
         try {
             videos = this.videoDao.getVideoByEventId(eventId);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new GetVideosException();
         }
 
@@ -182,7 +176,7 @@ public class LambdaServiceImpl {
          List<CameraModel> cameras = new ArrayList<CameraModel>();
          try {
              cameras = this.cameraDao.getCamerasByDeviceId(deviceId);
-         } catch (Exception e) {
+         } catch (final Exception e) {
              throw new GetCamerasException();
          }
 
@@ -196,14 +190,14 @@ public class LambdaServiceImpl {
         }
     }
 
-    private Map<String, Object> startConversionLambdaV2(List<VideoModel> videos, List<CameraModel> cameras) {
-        Map<String, Object> lambdaRequest = new HashMap<>();
-        Map<String, Object> bucket = new HashMap<>();
-        Map<String, Object> video = new HashMap<>();
+    private Map<String, Object> startConversionLambdaV2(final List<VideoModel> videos, final List<CameraModel> cameras) {
+        final Map<String, Object> lambdaRequest = new HashMap<>();
+        final Map<String, Object> bucket = new HashMap<>();
+        final Map<String, Object> video = new HashMap<>();
 
 
-        String videoUrl = videos.get(0).getUrl();
-        String path = videoUrl.substring(0,  videoUrl.lastIndexOf(java.io.File.separator) );
+        final String videoUrl = videos.get(0).getUrl();
+        final String path = videoUrl.substring(0,  videoUrl.lastIndexOf(java.io.File.separator) );
 
         bucket.put("name", this.bucketName);
         bucket.put("path", path);
@@ -212,11 +206,11 @@ public class LambdaServiceImpl {
         // this will change in the future
         video.put("cols", "auto");
 
-        List<Map<String, Object>> files = new ArrayList<>();
+        final List<Map<String, Object>> files = new ArrayList<>();
         for (int i = 0; cameras.size() > i; i++) {
-            Map<String, Object> f = new HashMap<>();
-            int rotation = cameras.get(i).getRotation();
-            String name = this.findVideo(videos, cameras.get(i).getCh());
+            final Map<String, Object> f = new HashMap<>();
+            final int rotation = cameras.get(i).getRotation();
+            final String name = this.findVideo(videos, cameras.get(i).getCh());
             if (name == null || name.isEmpty()) {
                 continue;
             }
@@ -230,13 +224,13 @@ public class LambdaServiceImpl {
 
         // execute lambda
         try {
-            String res = this.lambdaHttp.startVideoConversion(lambdaRequest);
-            Map<String, Object> result = new HashMap<>();
+            final String res = this.lambdaHttp.startVideoConversion(lambdaRequest);
+            final Map<String, Object> result = new HashMap<>();
             result.put("lambda", lambdaRequest);
             result.put("response", res);
             return result;
-        } catch (Exception e) {
-            Map<String, Object> result = new HashMap<>();
+        } catch (final Exception e) {
+            final Map<String, Object> result = new HashMap<>();
             result.put("lambda", lambdaRequest);
             return result;
         }
