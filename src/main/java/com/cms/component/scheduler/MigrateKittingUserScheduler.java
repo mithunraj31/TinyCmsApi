@@ -11,7 +11,7 @@ public class MigrateKittingUserScheduler {
     @Autowired
     private FetchDataServiceImpl fetchDataService;
     
-    // excute after the application initialized 10 second later.
+    // excute after the application initialized 1 second later.
     // then trigger each 10 min.
     @Scheduled(fixedDelay = 1000 * 60 * 10, initialDelay = 1000)
     private void fetchCustomerData() {

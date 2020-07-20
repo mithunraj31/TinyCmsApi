@@ -47,11 +47,10 @@ public class VehicleController {
 		token = token.replace(TOKEN_PREFIX, "");
 		String stk_user = this.getStkUserFromToken(token);
 
-		// Handle query parameter customer
-		if (customer != null && request.isUserInRole("ROLE_ADMIN") == false) {
-			return new ResponseEntity<Error>(HttpStatus.FORBIDDEN);
-		} else if (customer != null && request.isUserInRole("ROLE_ADMIN") == true) {
-			stk_user = customer;
+		if (request.isUserInRole("ROLE_ADMIN")
+			&& customer != null 
+			&& !customer.isEmpty()) {
+				stk_user = customer;
 		}
 
 		List<VehicleDto> vehicles = this.vehicleService.getAllVehiclesByUser(stk_user);
@@ -61,7 +60,6 @@ public class VehicleController {
 		response.put("total", vehicles.size());
 		response.put("vehicles", vehicles);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
-
 	}
 
 	/**
