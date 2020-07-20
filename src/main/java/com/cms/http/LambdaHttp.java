@@ -55,6 +55,4 @@ public class LambdaHttp {
 		}
 		return REQ_FACTORY;
 	}
-    
-    
 }

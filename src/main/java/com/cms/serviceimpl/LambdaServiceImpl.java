@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.NoSuchElementException;
 
 import com.cms.dao.CameraDao;
 import com.cms.dao.DeviceDao;
 import com.cms.dao.VideoDao;
+import com.cms.exceptions.GetCamerasException;
+import com.cms.exceptions.GetVideosException;
+import com.cms.exceptions.VideoNotFullfilledException;
 import com.cms.http.LambdaHttp;
 import com.cms.model.CameraModel;
 import com.cms.model.DeviceModel;
@@ -155,8 +158,88 @@ public class LambdaServiceImpl {
         return null;
     }
 
-    public Boolean onEventOccur(String eventId){
+    public Boolean onEventOccur(String eventId) {
         this.realtimeService.notifyEvent();
         return true;
+    }
+    public Map<String, Object>  uploadNewVideoNotifierV2(String deviceId, String eventId) {
+        // Check device camera count
+        DeviceModel device = this.deviceDao.getDeviceById(deviceId);
+        // Check whether the device is available
+        if (device.getDeviceId() == null) {
+            throw new NoSuchElementException();
+        }
+
+        // Get uploaded videos
+        List<VideoModel> videos = new ArrayList<VideoModel>();
+        try {
+            videos = this.videoDao.getVideoByEventId(eventId);
+        } catch (Exception e) {
+            throw new GetVideosException();
+        }
+
+         // Get camera Details
+         List<CameraModel> cameras = new ArrayList<CameraModel>();
+         try {
+             cameras = this.cameraDao.getCamerasByDeviceId(deviceId);
+         } catch (Exception e) {
+             throw new GetCamerasException();
+         }
+
+
+         // Get uploaded videos
+        if (cameras.size() > 0 && cameras.size() == videos.size()) {
+            // need to notify the lambda to convert video
+            return this.startConversionLambdaV2(videos, cameras);
+        } else {
+            throw new VideoNotFullfilledException();
+        }
+    }
+
+    private Map<String, Object> startConversionLambdaV2(List<VideoModel> videos, List<CameraModel> cameras) {
+        Map<String, Object> lambdaRequest = new HashMap<>();
+        Map<String, Object> bucket = new HashMap<>();
+        Map<String, Object> video = new HashMap<>();
+
+
+        String videoUrl = videos.get(0).getUrl();
+        String path = videoUrl.substring(0,  videoUrl.lastIndexOf(java.io.File.separator) );
+
+        bucket.put("name", this.bucketName);
+        bucket.put("path", path);
+        lambdaRequest.put("bucket", bucket);
+
+        // this will change in the future
+        video.put("cols", "auto");
+
+        List<Map<String, Object>> files = new ArrayList<>();
+        for (int i = 0; cameras.size() > i; i++) {
+            Map<String, Object> f = new HashMap<>();
+            int rotation = cameras.get(i).getRotation();
+            String name = this.findVideo(videos, cameras.get(i).getCh());
+            if (name == null || name.isEmpty()) {
+                continue;
+            }
+            f.put("rotate", rotation);
+            f.put("name", name);
+            files.add(f);
+        }
+        video.put("files", files);
+
+        lambdaRequest.put("video", video);
+
+        // execute lambda
+        try {
+            String res = this.lambdaHttp.startVideoConversion(lambdaRequest);
+            Map<String, Object> result = new HashMap<>();
+            result.put("lambda", lambdaRequest);
+            result.put("response", res);
+            return result;
+        } catch (Exception e) {
+            Map<String, Object> result = new HashMap<>();
+            result.put("lambda", lambdaRequest);
+            return result;
+        }
+
     }
 }

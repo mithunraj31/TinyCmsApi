@@ -4,7 +4,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import static com.cms.constants.Constants.HEADER_STRING;
-import static com.cms.constants.Constants.TOKEN_PREFIX;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,13 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cms.config.TokenProvider;
 import com.cms.dto.DailyOnlineDto;
 import com.cms.dto.HourlyOnlineDto;
 import com.cms.dto.VehicleDto;
+import com.cms.serviceimpl.UtilityServiceImpl;
 import com.cms.serviceimpl.VehicleServiceImpl;
-
-import io.jsonwebtoken.Claims;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -36,7 +33,7 @@ public class VehicleController {
 	private VehicleServiceImpl vehicleService;
 
 	@Autowired
-	private TokenProvider tokenProvider;
+	private UtilityServiceImpl utilityService;
 
 	@RequestMapping("")
 	public ResponseEntity<?> getAllVehiclesByUser(@RequestParam(required = false) String customer,
@@ -44,8 +41,7 @@ public class VehicleController {
 		String email = auth.getName();
 		// Get Stk_User id from token
 		String token = request.getHeader(HEADER_STRING);
-		token = token.replace(TOKEN_PREFIX, "");
-		String stk_user = this.getStkUserFromToken(token);
+		String stk_user = this.utilityService.getStkUserFromToken(token);
 
 		// Handle query parameter customer
 		if (customer != null && request.isUserInRole("ROLE_ADMIN") == false) {
@@ -61,7 +57,6 @@ public class VehicleController {
 		response.put("total", vehicles.size());
 		response.put("vehicles", vehicles);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
-
 	}
 
 	/**
@@ -72,7 +67,7 @@ public class VehicleController {
 
 		// get stk_user from JWT in HTTP request headers
 		String token = request.getHeader(HEADER_STRING);
-		String stk_user = this.getStkUserFromToken(token);
+		String stk_user = this.utilityService.getStkUserFromToken(token);
 
 		// if user is admin, set empty value to the variable
 		// because will search from all users
@@ -93,7 +88,7 @@ public class VehicleController {
 		
 		// get stk_user from JWT in HTTP request headers
 		String token = request.getHeader(HEADER_STRING);
-		String stk_user = this.getStkUserFromToken(token);
+		String stk_user = this.utilityService.getStkUserFromToken(token);
 
 			// if user is admin, set empty value to the variable
 		// because will search from all users
@@ -112,29 +107,14 @@ public class VehicleController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK); 
 	}
 
-	/**
-	 * get stk_user value from JWY payload
-	 * @param token JWT in HTTP request headers
-	 * @return String value of stk_user.
-	 */
-	private String getStkUserFromToken(String token) {
-		// remove text "Bearer " from header value
-		token = token.replace(TOKEN_PREFIX, "");
-		// get payload as Claims object
-		Claims user = tokenProvider.getAllClaimsFromToken(token);
-		// get value by object key
-		return user.get("stk_user", String.class);
-	}
-
+	
 	// retrive vehicle information by vehicle id.
 	@GetMapping("/{vehicleId}")
 	public ResponseEntity<?> getVehicleById(@PathVariable("vehicleId") long vehicleId,
 		HttpServletRequest request, Authentication auth) {
-		// Get Stk_User id from token
+		// get stk_user from JWT in HTTP request headers
 		String token = request.getHeader(HEADER_STRING);
-		token = token.replace(TOKEN_PREFIX, "");
-		Claims user = tokenProvider.getAllClaimsFromToken(token);
-		String stk_user = user.get("stk_user", String.class);
+		String stk_user = this.utilityService.getStkUserFromToken(token);
 		Map<String, Object> response = new LinkedHashMap<>();
 		
 		final VehicleDto vehicleDto = 
@@ -145,6 +125,6 @@ public class VehicleController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 		}
 		response.put("message", "Failed");
-		return new ResponseEntity(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 }

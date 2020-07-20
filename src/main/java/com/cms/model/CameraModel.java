@@ -6,31 +6,31 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="camera")
+@Table(name = "camera")
 public class CameraModel {
     @Id
-    @Column(name="id")
-    private int id;
+    @Column(name = "id")
+    private long id;
 
-    @Column(name="device_id")
+    @Column(name = "device_id")
     private String deviceId;
 
-    @Column(name="rotation", insertable = false)
+    @Column(name = "rotation")
     private int rotation;
-    
-    @Column(name="ch")
+
+    @Column(name = "ch")
     private String ch;
-    
-    public int getId() {
-        return id;
+
+    public long getId() {
+        return this.id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
     public String getDeviceId() {
-        return deviceId;
+        return this.deviceId;
     }
 
     public void setDeviceId(String deviceId) {
@@ -38,7 +38,7 @@ public class CameraModel {
     }
 
     public int getRotation() {
-        return rotation;
+        return this.rotation;
     }
 
     public void setRotation(int rotation) {
@@ -46,12 +46,10 @@ public class CameraModel {
     }
 
     public String getCh() {
-        return ch;
+        return this.ch;
     }
 
     public void setCh(String ch) {
         this.ch = ch;
     }
-
-    
 }
