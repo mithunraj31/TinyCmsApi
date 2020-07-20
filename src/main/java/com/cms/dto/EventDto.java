@@ -2,7 +2,9 @@ package com.cms.dto;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 public class EventDto {
 
@@ -221,10 +223,12 @@ public class EventDto {
         this.time = time;
     }
 
+    @JsonGetter("userName")
     public String getUsername() {
         return username;
     }
 
+    @JsonSetter("userName")
     public void setUsername(String username) {
         this.username = username;
     }
