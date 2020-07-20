@@ -42,7 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws IOException, ServletException {
         String path = req.getRequestURI();
         if (path.equals("/api/login") 
-            || path.equals("/api/lambda/video")
+            || path.startsWith("/api/lambda")
             ||  path.startsWith("/ws")
             || path.startsWith("/topic") ){
             chain.doFilter(req, res);
