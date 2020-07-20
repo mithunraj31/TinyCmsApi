@@ -1,12 +1,12 @@
 package com.cms.controller;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.validation.Valid;
 
-import com.cms.model.VideoUploadNotifierModel;
+import com.cms.model.NotifierModel;
 import com.cms.serviceimpl.LambdaServiceImpl;
+import com.cms.serviceimpl.RealTimeServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,9 +24,22 @@ public class LambdaController {
     @Autowired
     private LambdaServiceImpl lambdaService;
 
+    @Autowired
+    private RealTimeServiceImpl realtimeService;
+
     @PostMapping("/video")
-    public ResponseEntity<?> newVideoUploadNotifier(@Valid @RequestBody VideoUploadNotifierModel vunModel) {
-        Map<String, Object> data = this.lambdaService.uploadNewVideoNotifier(vunModel.getDeviceId(), vunModel.getEventId());
+    public ResponseEntity<?> newVideoUploadNotifier(@Valid @RequestBody final NotifierModel vunModel) {
+        final Map<String, Object> data = this.lambdaService.uploadNewVideoNotifier(vunModel.getDeviceId(), vunModel.getEventId());
         return new ResponseEntity<Map<String, Object>>(data, HttpStatus.OK);
+    }
+
+    @PostMapping("/event")
+    public ResponseEntity<?> newEventNotifier(@Valid @RequestBody final NotifierModel eventModel) {
+        final Boolean result = this.lambdaService.onEventOccur(eventModel.getEventId());
+        if (result){
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

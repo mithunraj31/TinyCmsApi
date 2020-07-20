@@ -2,7 +2,7 @@ package com.cms.model;
 
 import javax.validation.constraints.NotEmpty;
 
-public class VideoUploadNotifierModel {
+public class NotifierModel {
     
     @NotEmpty(message = "deviceId: deviceId is required")
     private String deviceId;

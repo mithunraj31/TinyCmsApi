@@ -32,6 +32,9 @@ public class LambdaServiceImpl {
     @Autowired
     private LambdaHttp lambdaHttp;
 
+    @Autowired
+    private RealTimeServiceImpl realtimeService;
+
     @Value("${vt.bucket.name}")
     private String bucketName;
 
@@ -150,5 +153,10 @@ public class LambdaServiceImpl {
             }
         }
         return null;
+    }
+
+    public Boolean onEventOccur(String eventId){
+        this.realtimeService.notifyEvent();
+        return true;
     }
 }
