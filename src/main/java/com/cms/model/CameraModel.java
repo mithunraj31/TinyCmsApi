@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="camera")
+@Table(name = "camera")
 public class CameraModel {
     @Id
     @Column(name = "id")
@@ -52,5 +52,4 @@ public class CameraModel {
     public void setCh(String ch) {
         this.ch = ch;
     }
-
 }

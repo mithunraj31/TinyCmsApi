@@ -14,9 +14,6 @@ public class DeviceModel {
     @Column(name = "device_id")
     private String deviceId;
 
-    @Column(name = "no_of_camera", insertable = false)
-    private int noOfCamera;
-
     @Column(name = "plate_number")
     private String plateNumber;
 
@@ -65,14 +62,6 @@ public class DeviceModel {
 
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
-    }
-
-    public int getNoOfCamera() {
-        return noOfCamera;
-    }
-
-    public void setNoOfCamera(int noOfCamera) {
-        this.noOfCamera = noOfCamera;
     }
 
     public String getPlateNumber() {

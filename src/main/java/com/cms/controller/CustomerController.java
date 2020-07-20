@@ -19,7 +19,7 @@ import com.cms.serviceimpl.CustomerServiceImpl;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/customer")
+@RequestMapping(value = "/api/customer", produces = "application/json;charset=UTF-8")
 public class CustomerController {
 	@Autowired
 	private CustomerServiceImpl customerService;
