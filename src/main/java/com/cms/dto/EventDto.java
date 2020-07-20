@@ -1,84 +1,70 @@
-package com.cms.model;
+package com.cms.dto;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
-@Entity
-@Table(name = "event")
-public class EventModel {
-    @Id
-    @Column(name = "id")
+public class EventDto {
+
     private String id;
 
-    @Column(name = "event_id")
     private String eventId;
 
-    @Column(name = "device_id")
     private String deviceId;
 
-    @Column(name = "driver_id")
     private String driverId;
 
-    @Column(name = "type")
     private int type;
 
-    @Column(name = "latitude")
     private float lat;
 
-    @Column(name = "longitude")
     private float lng;
 
-    @Column(name = "gx")
     private float gx;
 
-    @Column(name = "gy")
     private float gy;
 
-    @Column(name = "gz")
     private float gz;
 
-    @Column(name = "roll")
     private float roll;
 
-    @Column(name = "pitch")
     private float pitch;
 
-    @Column(name = "yaw")
     private float yaw;
 
-    @Column(name = "status")
     private int status;
 
-    @Column(name = "direction")
     private float direction;
 
-    @Column(name = "speed")
     private float speed;
 
-    @Column(name = "video_id")
     private String videoId;
 
-    @Column(name = "time")
     private LocalDateTime time;
 
-    @Column(name = "username")
     private String username;
 
-    @OneToOne(mappedBy = "event", fetch = FetchType.EAGER)
-    private VideoConvertedModel videoConverted;
+    private String videoUrl;
 
-    public VideoConvertedModel getVideoConverted() {
-        return this.videoConverted;
+    private VideoDto video;
+
+    public VideoDto getVideo() {
+        return this.video;
     }
 
-    public void setVideoConverted(VideoConvertedModel videoConverted) {
-        this.videoConverted = videoConverted;
+    public void setVideo(VideoDto video) {
+        this.video = video;
+    }
+
+    @JsonIgnore
+    public String getVideoUrl() {
+        return this.videoUrl;
+    }
+
+    public void setVideoUrl(String VideoUrl) {
+        this.videoUrl = VideoUrl;
     }
 
     public String getId() {
@@ -121,6 +107,7 @@ public class EventModel {
         this.type = type;
     }
 
+    @JsonIgnore
     public float getLat() {
         return lat;
     }
@@ -129,6 +116,7 @@ public class EventModel {
         this.lat = lat;
     }
 
+    @JsonIgnore
     public float getLng() {
         return lng;
     }
@@ -137,6 +125,7 @@ public class EventModel {
         this.lng = lng;
     }
 
+    @JsonIgnore
     public float getGx() {
         return gx;
     }
@@ -145,6 +134,7 @@ public class EventModel {
         this.gx = gx;
     }
 
+    @JsonIgnore
     public float getGy() {
         return gy;
     }
@@ -153,6 +143,7 @@ public class EventModel {
         this.gy = gy;
     }
 
+    @JsonIgnore
     public float getGz() {
         return gz;
     }
@@ -161,6 +152,7 @@ public class EventModel {
         this.gz = gz;
     }
 
+    @JsonIgnore
     public float getRoll() {
         return roll;
     }
@@ -169,6 +161,7 @@ public class EventModel {
         this.roll = roll;
     }
 
+    @JsonIgnore
     public float getPitch() {
         return pitch;
     }
@@ -177,6 +170,7 @@ public class EventModel {
         this.pitch = pitch;
     }
 
+    @JsonIgnore
     public float getYaw() {
         return yaw;
     }
@@ -185,6 +179,7 @@ public class EventModel {
         this.yaw = yaw;
     }
 
+    @JsonIgnore
     public int getStatus() {
         return status;
     }
@@ -193,6 +188,7 @@ public class EventModel {
         this.status = status;
     }
 
+    @JsonIgnore
     public float getDirection() {
         return direction;
     }
@@ -201,6 +197,7 @@ public class EventModel {
         this.direction = direction;
     }
 
+    @JsonIgnore
     public float getSpeed() {
         return speed;
     }
@@ -209,6 +206,7 @@ public class EventModel {
         this.speed = speed;
     }
 
+    @JsonIgnore
     public String getVideoId() {
         return videoId;
     }
@@ -225,11 +223,29 @@ public class EventModel {
         this.time = time;
     }
 
+    @JsonGetter("userName")
     public String getUsername() {
         return username;
     }
 
+    @JsonSetter("userName")
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public SensorDto getSensorValue() {
+        SensorDto dto = new SensorDto();
+        dto.setDirection(this.direction + "");
+        dto.setGx(this.gx + "");
+        dto.setGy(this.gy + "");
+        dto.setGz(this.gz + "");
+        dto.setLat(this.lat + "");
+        dto.setLng(this.lng + "");
+        dto.setPitch(this.pitch + "");
+        dto.setRoll(this.roll + "");
+        dto.setSpeed(this.speed);
+        dto.setStatus(this.status);
+        dto.setYaw(this.yaw + "");
+        return dto;
     }
 }
