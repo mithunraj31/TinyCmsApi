@@ -16,7 +16,7 @@ public class CameraModel {
     private String deviceId;
 
     @Column(name = "rotation")
-    private long rotation;
+    private int rotation;
 
     @Column(name = "ch")
     private String ch;
@@ -37,11 +37,11 @@ public class CameraModel {
         this.deviceId = deviceId;
     }
 
-    public long getRotation() {
+    public int getRotation() {
         return this.rotation;
     }
 
-    public void setRotation(long rotation) {
+    public void setRotation(int rotation) {
         this.rotation = rotation;
     }
 
