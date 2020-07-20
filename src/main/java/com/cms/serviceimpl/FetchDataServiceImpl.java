@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.cms.dao.CustomerDao;
 import com.cms.dao.DeviceDao;
@@ -39,6 +40,20 @@ public class FetchDataServiceImpl {
         } catch (IOException e1) {
             return false;
         }
+
+        final List<CustomerModel> existingList = customerDao.findAll();
+
+        List<Integer> customerIdList = customerList.stream()
+                                        .map(x -> x.getId())
+                                        .collect(Collectors.toList());
+
+        List<CustomerModel> deletingList = existingList.stream()
+                                        .filter(x -> !customerIdList.contains(x.getId()))
+                                        .collect(Collectors.toList());
+
+        this.deleteCustomerByIds(deletingList);
+
+
         final List<CustomerModel> customerModels = new ArrayList<>();
         for (CustomerDto customerDto : customerList) {
             final CustomerModel customer = new CustomerModel();
@@ -101,5 +116,12 @@ public class FetchDataServiceImpl {
             return false;
         }
         return true;
+    }
+
+    private void deleteCustomerByIds(List<CustomerModel> entities) {
+        if (entities != null && entities.size() > 0) {
+            this.customerDao.deleteAll(entities);
+        }
+        
     }
 }
