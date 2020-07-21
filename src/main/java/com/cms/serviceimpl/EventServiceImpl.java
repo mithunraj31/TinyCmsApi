@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.cms.dao.CameraDao;
@@ -32,6 +33,9 @@ public class EventServiceImpl {
 	private ModelMapper modelMapper;
 
 	private VideoConvertedDao videoConvertedDao;
+
+	@Value("${vt.url.prefix}")
+	private String videoUrlPrefix;
 
 	@Autowired
 	public EventServiceImpl(
@@ -144,7 +148,7 @@ public class EventServiceImpl {
 			}
 			if (convertedVideos.stream().anyMatch(x -> x.getId().equals(dto.getEventId()))) {
 				VideoConvertedModel videoConvertedModel = convertedVideos.stream().filter(x -> x.getId().equals(dto.getEventId())).findFirst().get();
-				videoDto.setVideoUrl(videoConvertedModel.getUrl());
+				videoDto.setVideoUrl(this.videoUrlPrefix + videoConvertedModel.getUrl());
 			}
 			
 			videoDto.setVideoId(dto.getVideoId());
