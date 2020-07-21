@@ -11,11 +11,13 @@ import org.springframework.stereotype.Service;
 
 import com.cms.dao.CameraDao;
 import com.cms.dao.EventDao;
+import com.cms.dao.VideoConvertedDao;
 import com.cms.dao.VideoDao;
 import com.cms.dto.EventDto;
 import com.cms.dto.VideoDto;
 import com.cms.model.CameraModel;
 import com.cms.model.EventModel;
+import com.cms.model.VideoConvertedModel;
 import com.cms.model.VideoModel;
 
 @Service("EventServiceImpl")
@@ -29,12 +31,15 @@ public class EventServiceImpl {
 
 	private ModelMapper modelMapper;
 
+	private VideoConvertedDao videoConvertedDao;
+
 	@Autowired
 	public EventServiceImpl(
 		ModelMapper modelMapper, 
 		EventDao eventDao,
 		VideoDao videoDao,
-		CameraDao cameraDao
+		CameraDao cameraDao,
+		VideoConvertedDao videoConvertedDao
 		) {
 		
 		// inject services in the constructor
@@ -42,6 +47,7 @@ public class EventServiceImpl {
 		this.eventDao = eventDao;
 		this.cameraDao = cameraDao;
 		this.videoDao = videoDao;
+		this.videoConvertedDao = videoConvertedDao;
 
 		// config model mapping from DAO to DTO
 		this.modelMapper.typeMap(EventModel.class, EventDto.class)
@@ -73,9 +79,9 @@ public class EventServiceImpl {
 			return getAllEvent();
 		}
 
-		List<EventModel> events = eventDao.findByUsername(stkUser);
+		List<EventModel> events = this.eventDao.findByUsername(stkUser);
 		List<EventDto> dtoList = events.stream()
-			.map(x -> modelMapper.map(x, EventDto.class))
+			.map(x -> this.modelMapper.map(x, EventDto.class))
 			.collect(Collectors.toList());
 
 		return this.setVideoToList(dtoList);
@@ -86,11 +92,11 @@ public class EventServiceImpl {
 	 * then set video stutus to each objects.
 	 */
 	public EventDto getByEventId(String eventId) {
-		EventModel eventModel = eventDao.findByEventId(eventId);
+		EventModel eventModel = this.eventDao.findByEventId(eventId);
 		
 
 		if (eventModel != null) {
-			EventDto eventDto = modelMapper.map(eventModel, EventDto.class);
+			EventDto eventDto = this.modelMapper.map(eventModel, EventDto.class);
 			List<EventDto> dtos = new ArrayList<>();
 			dtos.add(eventDto);
 
@@ -118,6 +124,8 @@ public class EventServiceImpl {
 		
 		List<EventDto> newDtos = new ArrayList<>();
 
+		List<VideoConvertedModel> convertedVideos = videoConvertedDao.findAll();
+
 		for (EventDto dto : dtos) {
 			VideoDto videoDto = new VideoDto();
 			if (videos.stream().anyMatch(x -> x.getEventId().equals(dto.getEventId()))) {
@@ -134,8 +142,11 @@ public class EventServiceImpl {
 									.count();
 				videoDto.setNoOfCamera(cameraCount);
 			}
-
-			videoDto.setVideoUrl(dto.getVideoUrl());
+			if (convertedVideos.stream().anyMatch(x -> x.getId().equals(dto.getEventId()))) {
+				VideoConvertedModel videoConvertedModel = convertedVideos.stream().filter(x -> x.getId().equals(dto.getEventId())).findFirst().get();
+				videoDto.setVideoUrl(videoConvertedModel.getUrl());
+			}
+			
 			videoDto.setVideoId(dto.getVideoId());
 			dto.setVideo(videoDto);
 			newDtos.add(dto);
