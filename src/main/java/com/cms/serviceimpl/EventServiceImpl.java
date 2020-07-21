@@ -120,15 +120,17 @@ public class EventServiceImpl {
 
 		for (EventDto dto : dtos) {
 			VideoDto videoDto = new VideoDto();
-			if (videos.stream().anyMatch(x -> x.getDeviceId().equals(dto.getDeviceId()))) {
+			if (videos.stream().anyMatch(x -> x.getEventId().equals(dto.getEventId()))) {
 				
-				long videoCount = videos.stream().filter(x -> x.getDeviceId().equals(dto.getDeviceId()))
+				long videoCount = videos.stream()
+									.filter(x -> x.getEventId().equals(dto.getEventId()))
 									.count();
 				videoDto.setNoOfVideo(videoCount);
 			}
 
 			if (cameras.stream().anyMatch(x -> x.getDeviceId().equals(dto.getDeviceId()))) {
-				long cameraCount = cameras.stream().filter(x -> x.getDeviceId().equals(dto.getDeviceId()))
+				long cameraCount = cameras.stream()
+									.filter(x -> x.getDeviceId().equals(dto.getDeviceId()))
 									.count();
 				videoDto.setNoOfCamera(cameraCount);
 			}
