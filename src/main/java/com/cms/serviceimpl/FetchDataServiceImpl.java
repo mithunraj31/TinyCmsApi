@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.cms.dao.CustomerDao;
 import com.cms.dao.DeviceDao;
@@ -39,6 +40,19 @@ public class FetchDataServiceImpl {
         } catch (IOException e1) {
             return false;
         }
+
+        final List<CustomerModel> existingList = customerDao.findAll();
+
+        List<Integer> customerIdList = customerList.stream()
+                                        .map(x -> x.getId())
+                                        .collect(Collectors.toList());
+
+        List<CustomerModel> deletingList = existingList.stream()
+                                            .filter(x -> !customerIdList.contains(x.getId()))
+                                            .collect(Collectors.toList());
+
+        this.deleteCustomers(deletingList);
+
         final List<CustomerModel> customerModels = new ArrayList<>();
         for (CustomerDto customerDto : customerList) {
             final CustomerModel customer = new CustomerModel();
@@ -69,6 +83,18 @@ public class FetchDataServiceImpl {
                 return false;
             }
 
+            final List<DeviceModel> existingList = this.deviceDao.findAll();
+
+            List<String> deviceIdList = devices.stream()
+                                            .map(x -> x.getId() + "")
+                                            .collect(Collectors.toList());
+
+            List<DeviceModel> deletingList = existingList.stream()
+                                            .filter(x -> !deviceIdList.contains(x.getDeviceId()))
+                                            .collect(Collectors.toList());
+
+            this.deleteDevices(deletingList);
+
             for (VehicleDto device : devices) {
                 DeviceModel toSaveDevice = new DeviceModel();
                 toSaveDevice.setActive(device.getDetail().isIsActive());
@@ -91,7 +117,6 @@ public class FetchDataServiceImpl {
                 toSaveDevice.setUdpStreamOutPort(device.getDetail().getUdpStreamOutPort());
                 toSaveDevice.setUpdate_time(LocalDateTime.now());
                 toSaveDevices.add(toSaveDevice);
-                
             }
         }
 
@@ -101,5 +126,17 @@ public class FetchDataServiceImpl {
             return false;
         }
         return true;
+    }
+
+    private void deleteCustomers(List<CustomerModel> entities) {
+        if (entities != null && entities.size() > 0) {
+            this.customerDao.deleteAll(entities);
+        }
+    }
+
+    private void deleteDevices(List<DeviceModel> entities) {
+        if (entities != null && entities.size() > 0) {
+            this.deviceDao.deleteAll(entities);
+        }
     }
 }

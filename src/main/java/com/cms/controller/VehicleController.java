@@ -43,11 +43,10 @@ public class VehicleController {
 		String token = request.getHeader(HEADER_STRING);
 		String stk_user = this.utilityService.getStkUserFromToken(token);
 
-		// Handle query parameter customer
-		if (customer != null && request.isUserInRole("ROLE_ADMIN") == false) {
-			return new ResponseEntity<Error>(HttpStatus.FORBIDDEN);
-		} else if (customer != null && request.isUserInRole("ROLE_ADMIN") == true) {
-			stk_user = customer;
+		if (request.isUserInRole("ROLE_ADMIN")
+			&& customer != null 
+			&& !customer.isEmpty()) {
+				stk_user = customer;
 		}
 
 		List<VehicleDto> vehicles = this.vehicleService.getAllVehiclesByUser(stk_user);
