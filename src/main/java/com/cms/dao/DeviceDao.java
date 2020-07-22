@@ -1,6 +1,5 @@
 package com.cms.dao;
 
-import java.util.List;
 
 import com.cms.model.DeviceModel;
 
@@ -13,4 +12,6 @@ public interface DeviceDao extends JpaRepository<DeviceModel, String>{
     @Query(value="select * from device where device_id = ?1 limit 1;",nativeQuery = true)
     public DeviceModel getDeviceById(String device_id);
     
+    @Query(value="select COUNT(*) as total from device where stk_user = ?", nativeQuery = true)
+    public long getCountByUser(String user);
 }

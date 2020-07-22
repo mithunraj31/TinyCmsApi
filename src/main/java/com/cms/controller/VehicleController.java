@@ -72,9 +72,11 @@ public class VehicleController {
 		// because will search from all users
 		stk_user = stk_user.toLowerCase().equals("admin") ? "" : stk_user;
 		long online = this.vehicleService.getOnlineVehicle(stk_user);
+		long total = this.vehicleService.getTotalVehicleCount(stk_user);
 		Map<String, Object> response = new LinkedHashMap<>();
 
 		response.put("online", online);
+		response.put("total", total);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK); 
 	}
 
