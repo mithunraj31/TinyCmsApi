@@ -66,7 +66,7 @@ public class EventServiceImpl {
 	 */
 	public List<EventDto> getAllEvent() {
 		// get all event
-		List<EventModel> events = eventDao.findAll();
+		List<EventModel> events = eventDao.getAllEvents();
 		List<EventDto> dtoList = events.stream().map(x -> modelMapper.map(x, EventDto.class))
 				.collect(Collectors.toList());
 
@@ -84,7 +84,7 @@ public class EventServiceImpl {
 			return getAllEvent();
 		}
 
-		List<EventModel> events = this.eventDao.findByUsername(stkUser);
+		List<EventModel> events = this.eventDao.getAllEvents(stkUser);
 		List<EventDto> dtoList = events.stream().map(x -> this.modelMapper.map(x, EventDto.class))
 				.collect(Collectors.toList());
 
