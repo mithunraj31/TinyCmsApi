@@ -44,5 +44,9 @@ public interface EventDao extends JpaRepository<EventModel, Integer> {
 	+"from event where type in (14,16,17,20,21,22) and username = ?1", nativeQuery = true)
 	Map<Object,Object> getEventStatByUser(String username);
 
-	
+	@Query(value = "select * from event order by time desc", nativeQuery = true)
+	List<EventModel> getAllEvents();
+
+	@Query(value = "select * from event where username = ?1 order by time desc", nativeQuery = true)
+	List<EventModel> getAllEvents(String username);
 }
