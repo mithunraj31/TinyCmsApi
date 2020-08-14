@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public interface CameraDao extends JpaRepository<CameraModel, Integer> {
+public interface CameraDao extends JpaRepository<CameraModel, Long> {
     @Query(value="select * from camera as c where c.device_id = ?1",nativeQuery = true)
     public List<CameraModel> getCamerasByDeviceId(String deviceId);
 
