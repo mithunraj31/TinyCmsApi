@@ -12,10 +12,8 @@ import com.cms.dao.CameraDao;
 import com.cms.dto.CameraDto;
 import com.cms.model.CameraModel;
 
-
 @Service("CameraServiceImpl")
 public class CameraServiceImpl {
-	
 
 	@Autowired
 	private CameraDao cameraDao;
@@ -26,46 +24,44 @@ public class CameraServiceImpl {
 		cameraModel.setDeviceId(newCamera.getDeviceId());
 		cameraModel.setRotation(newCamera.getRotation());
 		try {
-		cameraDao.save(cameraModel);
-		}catch(Exception ex){
+			cameraDao.save(cameraModel);
+		} catch (Exception ex) {
 			throw new Exception(ex.getMessage());
-			
+
 		}
 	}
 
 	public void updateCamera(@Valid CameraDto newCamera) throws Exception {
 		CameraModel cameraModel = cameraDao.findById(newCamera.getId()).orElse(null);
-		if(Objects.nonNull(cameraModel)) {
+		if (cameraModel != null) {
 			cameraModel.setCh(newCamera.getCh());
 			cameraModel.setDeviceId(newCamera.getDeviceId());
 			cameraModel.setId(newCamera.getId());
 			cameraModel.setRotation(newCamera.getRotation());
 			try {
-			cameraDao.save(cameraModel);
-			}catch (Exception ex) {
+				cameraDao.save(cameraModel);
+			} catch (Exception ex) {
 				throw new Exception(ex.getMessage());
 			}
 		}
-			
-		
+
 	}
 
 	public void deleteCamera(String deviceId, int cameraId) throws Exception {
 		try {
-		cameraDao.deleteCamera(deviceId,cameraId);
-		}catch (Exception ex) {
+			cameraDao.deleteCamera(deviceId, cameraId);
+		} catch (Exception ex) {
 			throw new Exception(ex.getMessage());
 		}
-		
+
 	}
 
 	public List<CameraModel> getCamerasByDeviceId(String deviceId) throws Exception {
 		try {
-		return cameraDao.getCamerasByDeviceId(deviceId);
-		}catch(Exception ex) {
+			return cameraDao.getCamerasByDeviceId(deviceId);
+		} catch (Exception ex) {
 			throw new Exception(ex.getMessage());
 		}
 	}
-
 
 }
